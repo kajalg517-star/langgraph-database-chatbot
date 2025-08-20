@@ -169,6 +169,15 @@ Respond with just the formatted text response (no JSON):
       }
     }
 
+    // Add critical constraint information
+    context += `\n⚠️  IMPORTANT CONSTRAINTS:
+- student_stress_levels has 23 columns, student_stress_survey has 28 columns
+- NEVER use UNION or UNION ALL between these tables (different column counts will cause errors)
+- Use JOINs when combining data from both tables
+- Both tables can be joined on the 'id' column
+- For queries needing data from both tables, use explicit JOINs with specific column selections
+- Example: SELECT ssl.anxiety_level, sss.age FROM college.student_stress_levels ssl JOIN college.student_stress_survey sss ON ssl.id = sss.id`;
+
     return context;
   }
 
