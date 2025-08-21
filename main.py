@@ -1,6 +1,36 @@
 #!/usr/bin/env python3
 """
-Main entry point for the Python Database Chatbot with Google ADK.
+🚀 MAIN PROGRAM LAUNCHER - Start Your Database Chatbot Here!
+
+WHAT THIS FILE DOES:
+This is the "front door" of your chatbot application. When you run the program,
+this file starts everything up and gets the chatbot ready to answer your questions.
+
+HOW TO USE:
+1. Open your terminal/command prompt
+2. Navigate to this folder
+3. Run one of these commands:
+
+   🧪 Test your database connection:
+   python main.py test
+
+   💬 Start interactive chat (recommended):
+   python main.py chat
+
+   ❓ Ask a single question:
+   python main.py query "How many students are there?"
+
+WHAT HAPPENS WHEN YOU RUN IT:
+1. ✅ Checks your configuration (.env file)
+2. ✅ Validates your database and AI credentials
+3. ✅ Starts up the Google ADK agent
+4. ✅ Connects to your Supabase database
+5. ✅ Launches the beautiful command-line interface
+6. 🎉 Ready to answer your database questions!
+
+TROUBLESHOOTING:
+If something goes wrong, this file will show you helpful error messages
+to guide you toward fixing the problem.
 """
 
 import sys
@@ -16,7 +46,22 @@ from src.cli.interface import cli
 
 
 def main():
-    """Main entry point."""
+    """
+    🎬 MAIN FUNCTION - The Director of the Show
+
+    WHAT THIS FUNCTION DOES:
+    This is like the director of a movie - it coordinates everything:
+    1. Checks that all your settings are correct
+    2. Makes sure your database and AI credentials work
+    3. Starts up all the chatbot components
+    4. Handles any startup problems gracefully
+    5. Launches the command-line interface
+
+    IF SOMETHING GOES WRONG:
+    This function will catch problems and show you friendly error messages
+    instead of scary technical errors. It helps you understand what needs
+    to be fixed.
+    """
     try:
         # Validate configuration
         config.validate_required_fields()

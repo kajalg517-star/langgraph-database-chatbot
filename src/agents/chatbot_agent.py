@@ -1,6 +1,30 @@
 """
-Main Chatbot Agent using Google ADK.
-Orchestrates the database query workflow with proper state management.
+🤖 MAIN CHATBOT BRAIN - This is the heart of our database chatbot!
+
+WHAT THIS FILE DOES:
+This file contains the "brain" of our chatbot that can answer questions about your database.
+Think of it like a smart assistant that:
+1. Listens to your questions in plain English
+2. Figures out if it's about the database
+3. Converts your question into database language (SQL)
+4. Gets the answer from your database
+5. Explains the results back to you in plain English
+
+HOW IT WORKS:
+- Uses Google's AI (Gemini) to understand your questions
+- Has special "tools" to work with your database
+- Follows a step-by-step process to get you accurate answers
+- Keeps track of your conversation so you can ask follow-up questions
+
+EXAMPLE CONVERSATION:
+You: "How many students have high anxiety?"
+Bot: 1. Checks if this is about the database ✓
+     2. Looks at database structure to understand what data exists
+     3. Creates SQL: "SELECT COUNT(*) FROM students WHERE anxiety_level > 15"
+     4. Runs the query on your database
+     5. Responds: "There are 23 students with high anxiety levels."
+
+This file orchestrates all these steps using Google's Agent Development Kit (ADK).
 """
 
 import asyncio
@@ -17,7 +41,21 @@ from ..utils.logger import logger, log_agent_interaction
 
 
 class ChatbotState(BaseModel):
-    """State management for the chatbot agent."""
+    """
+    📝 CHATBOT MEMORY - Keeps track of what's happening in a conversation
+
+    WHAT THIS IS:
+    Think of this like the chatbot's notepad where it writes down:
+    - What you asked
+    - Whether it's a database question
+    - What SQL query it created
+    - What results it found
+    - Any errors that happened
+
+    WHY WE NEED THIS:
+    Just like you might take notes during a conversation to remember what was said,
+    the chatbot needs to remember each step of processing your question.
+    """
     user_query: str = ""
     is_valid_database_query: bool = False
     database_schema: Optional[DatabaseSchema] = None
@@ -32,7 +70,22 @@ class ChatbotState(BaseModel):
 
 async def validate_database_query(user_query: str) -> Dict[str, Any]:
     """
-    Tool function to validate if a query is database-related.
+    🔍 STEP 1: CHECK IF QUESTION IS ABOUT THE DATABASE
+
+    WHAT THIS DOES:
+    Before doing any work, we need to check if your question is actually about the database.
+
+    EXAMPLES:
+    ✅ Database questions: "How many students?", "Show me high anxiety levels"
+    ❌ Not database: "Hello", "What's the weather?", "Tell me a joke"
+
+    WHY THIS MATTERS:
+    We don't want to waste time trying to create database queries for casual conversation.
+    This step acts like a smart filter.
+
+    RETURNS:
+    - is_valid: True if it's about the database, False if not
+    - reason: Explanation of why it was accepted or rejected
     """
     try:
         validation_result = await gemini_service.validate_database_query(user_query)
@@ -53,7 +106,25 @@ async def validate_database_query(user_query: str) -> Dict[str, Any]:
 
 async def load_database_schema() -> Dict[str, Any]:
     """
-    Tool function to load database schema information.
+    📊 STEP 2: LEARN ABOUT YOUR DATABASE STRUCTURE
+
+    WHAT THIS DOES:
+    Before creating a query, the chatbot needs to understand your database structure.
+    It's like looking at a map before giving directions.
+
+    WHAT IT FINDS:
+    - What tables exist (like "students", "courses", "grades")
+    - What columns are in each table (like "name", "age", "anxiety_level")
+    - What type of data each column holds (numbers, text, dates)
+
+    REAL EXAMPLE:
+    Your database might have:
+    - Table: "student_stress_survey"
+    - Columns: "student_id" (number), "anxiety_level" (number), "depression_score" (number)
+
+    WHY THIS IS IMPORTANT:
+    Without knowing the structure, the chatbot can't create accurate database queries.
+    It's like trying to find a book in a library without knowing how it's organized.
     """
     try:
         schema_result = await database_service.get_schema_info()
@@ -100,7 +171,29 @@ async def load_database_schema() -> Dict[str, Any]:
 
 async def generate_sql_query(user_query: str, schema_data: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Tool function to generate SQL from natural language.
+    🧠 STEP 3: TRANSLATE YOUR QUESTION INTO DATABASE LANGUAGE (SQL)
+
+    WHAT THIS DOES:
+    This is where the magic happens! The chatbot takes your plain English question
+    and converts it into SQL (the language databases understand).
+
+    TRANSLATION EXAMPLES:
+    You ask: "How many students have anxiety above 15?"
+    Bot creates: "SELECT COUNT(*) FROM student_stress_survey WHERE anxiety_level > 15"
+
+    You ask: "Show me the top 5 most stressed students"
+    Bot creates: "SELECT * FROM student_stress_survey ORDER BY stress_level DESC LIMIT 5"
+
+    HOW IT WORKS:
+    1. Uses Google's AI (Gemini) to understand your question
+    2. Looks at the database structure it learned in Step 2
+    3. Combines both to create the perfect SQL query
+    4. Includes safety checks to make sure the query is valid
+
+    RETURNS:
+    - sql: The actual database query
+    - explanation: Plain English explanation of what the query does
+    - confidence: How sure the AI is that this query is correct (0-1 scale)
     """
     try:
         # Convert schema data to DatabaseSchema object
@@ -127,7 +220,30 @@ async def generate_sql_query(user_query: str, schema_data: Dict[str, Any]) -> Di
 
 async def validate_sql_query(sql_query: str) -> Dict[str, Any]:
     """
-    Tool function to validate generated SQL for safety.
+    🛡️ STEP 4: SAFETY CHECK - MAKE SURE THE QUERY IS SAFE
+
+    WHAT THIS DOES:
+    Before running any query on your database, we double-check that it's safe.
+    Think of this like a security guard checking IDs before letting someone into a building.
+
+    SAFETY CHECKS:
+    ✅ Only allows SELECT queries (reading data)
+    ❌ Blocks DELETE, UPDATE, DROP (changing/deleting data)
+    ❌ Blocks dangerous operations that could harm your database
+    ❌ Blocks attempts to access system information
+
+    WHY THIS IS CRITICAL:
+    Your database contains important information. We never want to accidentally:
+    - Delete your data
+    - Change your data
+    - Access sensitive system information
+    - Run malicious code
+
+    EXAMPLE:
+    Safe: "SELECT COUNT(*) FROM students"
+    Unsafe: "DELETE FROM students" (would delete all your student data!)
+
+    This step ensures we only READ data, never modify it.
     """
     try:
         validation_result = await gemini_service.validate_sql_query(sql_query)
@@ -151,12 +267,35 @@ async def validate_sql_query(sql_query: str) -> Dict[str, Any]:
 
 
 async def format_final_response(
-    user_query: str, 
-    sql_query: str, 
+    user_query: str,
+    sql_query: str,
     query_results: List[Dict[str, Any]]
 ) -> Dict[str, Any]:
     """
-    Tool function to format the final response.
+    💬 STEP 6: TRANSLATE RESULTS BACK TO PLAIN ENGLISH
+
+    WHAT THIS DOES:
+    The database returns raw data (numbers, codes, etc.), but you want a friendly answer.
+    This step converts the technical results into a conversational response.
+
+    TRANSFORMATION EXAMPLES:
+
+    Raw database result: [{"count": 23}]
+    Your question: "How many students have high anxiety?"
+    Friendly response: "There are 23 students with high anxiety levels in the database."
+
+    Raw database result: [{"name": "John", "anxiety": 18}, {"name": "Sarah", "anxiety": 19}]
+    Your question: "Who has the highest anxiety?"
+    Friendly response: "Sarah has the highest anxiety level at 19, followed by John at 18."
+
+    HOW IT WORKS:
+    1. Takes your original question
+    2. Looks at the SQL query that was used
+    3. Analyzes the raw results from the database
+    4. Uses AI to create a natural, conversational response
+    5. Includes relevant insights and context
+
+    This makes the chatbot feel like talking to a knowledgeable human assistant!
     """
     try:
         formatting_result = await gemini_service.format_response(
@@ -189,7 +328,31 @@ format_response_tool = FunctionTool(format_final_response)
 
 def create_chatbot_agent() -> Agent:
     """
-    Create and configure the main chatbot agent with all necessary tools.
+    🏗️ CHATBOT ASSEMBLY LINE - PUTTING IT ALL TOGETHER
+
+    WHAT THIS DOES:
+    This function is like an assembly line that builds the complete chatbot.
+    It takes all the individual "tools" (the functions above) and combines them
+    into one smart agent that can handle your database questions.
+
+    THE CHATBOT'S TOOLBOX:
+    1. 🔍 Question Validator - Checks if it's about the database
+    2. 📊 Schema Loader - Learns your database structure
+    3. 🧠 SQL Generator - Converts English to database language
+    4. 🛡️ Safety Checker - Makes sure queries are safe
+    5. ⚡ Query Executor - Runs the query on your database
+    6. 💬 Response Formatter - Converts results back to English
+
+    THE CHATBOT'S PERSONALITY:
+    - Helpful and friendly
+    - Only answers database-related questions
+    - Always explains what it's doing
+    - Prioritizes safety and accuracy
+    - Maintains conversation context
+
+    THINK OF IT LIKE:
+    A knowledgeable librarian who knows exactly where everything is stored,
+    can quickly find what you're looking for, and explains it in simple terms.
     """
 
     instruction = """

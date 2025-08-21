@@ -1,6 +1,40 @@
 """
-CLI Interface for the Python Database Chatbot.
-Provides interactive and single-query modes using Google ADK Runner.
+🖥️ COMMAND LINE INTERFACE - Your Beautiful Chat Experience
+
+WHAT THIS FILE DOES:
+This file creates the beautiful, user-friendly interface you see when chatting
+with your database bot. It's like the "face" of your chatbot that makes
+everything look professional and easy to use.
+
+FEATURES YOU'LL SEE:
+🎨 Beautiful colored panels and formatting
+⏳ Spinning animations while processing your questions
+📊 Organized display of results
+💬 Friendly conversation flow
+🧵 Session tracking (remembers your conversation)
+❌ Clear error messages if something goes wrong
+
+THREE WAYS TO USE YOUR CHATBOT:
+
+1. 🧪 TEST MODE: python main.py test
+   - Quickly checks if your database connection works
+   - Shows green ✅ if everything is working
+   - Shows red ❌ with helpful tips if there are problems
+
+2. 💬 INTERACTIVE CHAT MODE: python main.py chat (RECOMMENDED!)
+   - Start a conversation with your database
+   - Ask multiple questions in a row
+   - The bot remembers context from previous questions
+   - Type 'exit' when you're done
+   - Beautiful welcome screen and formatting
+
+3. ❓ SINGLE QUESTION MODE: python main.py query "your question"
+   - Ask one quick question and get an answer
+   - Perfect for scripts or quick lookups
+   - No conversation memory, just one-and-done
+
+The interface uses Google ADK's Runner system to manage conversations
+and provides a much better experience than basic command-line tools.
 """
 
 import asyncio

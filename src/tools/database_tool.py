@@ -1,6 +1,34 @@
 """
-Custom Supabase Database Tool for Google ADK.
-Provides database access functionality as an ADK tool.
+🗄️ DATABASE CONNECTION TOOL - Your Gateway to Data
+
+WHAT THIS FILE DOES:
+This file is like a translator between the chatbot and your database.
+Think of it as a specialized messenger that:
+1. Takes database questions from the chatbot
+2. Safely connects to your Supabase database
+3. Runs the queries and gets results
+4. Brings the data back to the chatbot
+
+WHY WE NEED THIS:
+Your database speaks a different language (SQL) than the chatbot.
+This tool acts as a bridge, making sure:
+- Only safe queries are allowed (no deleting or changing data)
+- Connection to your database is secure
+- Results are properly formatted
+- Errors are handled gracefully
+
+SECURITY FEATURES:
+🛡️ Only allows SELECT queries (reading data)
+🛡️ Blocks dangerous operations (DELETE, UPDATE, DROP)
+🛡️ Uses secure connection to your Supabase database
+🛡️ Validates all queries before running them
+
+REAL-WORLD ANALOGY:
+Like a bank teller who:
+- Checks your ID before any transaction
+- Only allows you to view your account (no unauthorized changes)
+- Safely accesses the bank's systems
+- Gives you the information in a format you understand
 """
 
 import json
@@ -14,7 +42,24 @@ from ..utils.logger import logger, log_query_processing
 
 
 class DatabaseQueryResult(BaseModel):
-    """Result of a database query."""
+    """
+    📋 QUERY RESULT CONTAINER - What We Get Back From the Database
+
+    WHAT THIS IS:
+    When we ask the database a question, this is the "envelope" that contains the answer.
+    It's like a report card that tells us:
+    - Did the query work? (success/failure)
+    - What data did we get back?
+    - How many results were found?
+    - Were there any problems?
+
+    EXAMPLE:
+    If you ask "How many students?", this container might hold:
+    - success: True
+    - data: [{"count": 102}]
+    - row_count: 1
+    - error: None
+    """
     data: Optional[List[Dict[str, Any]]] = None
     error: Optional[str] = None
     row_count: int = 0
@@ -23,8 +68,30 @@ class DatabaseQueryResult(BaseModel):
 
 class SupabaseDatabaseService:
     """
-    Service for executing SQL queries against Supabase database.
-    Maintains compatibility with the original TypeScript RPC approach.
+    🔌 DATABASE CONNECTION SERVICE - The Actual Database Worker
+
+    WHAT THIS CLASS DOES:
+    This is the "worker" that actually talks to your Supabase database.
+    Think of it like a dedicated employee whose only job is to:
+    1. Connect securely to your database
+    2. Run queries safely
+    3. Bring back the results
+    4. Handle any problems that occur
+
+    KEY RESPONSIBILITIES:
+    🔐 Secure Connection: Uses your database credentials safely
+    🛡️ Safety First: Only allows safe, read-only queries
+    📊 Data Retrieval: Gets information from your database tables
+    🔍 Schema Discovery: Learns about your database structure
+    ⚡ Fast Processing: Handles queries efficiently
+
+    SAFETY MEASURES:
+    - Only SELECT queries allowed (reading data)
+    - No DELETE, UPDATE, or DROP operations
+    - Validates every query before running
+    - Uses the same secure RPC function as your original TypeScript version
+
+    This maintains 100% compatibility with your existing database setup!
     """
 
     def __init__(self):
