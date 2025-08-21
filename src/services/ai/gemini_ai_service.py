@@ -201,7 +201,7 @@ Natural Language Query: "{natural_language_query}"
 Rules:
 1. Generate ONLY valid {database_type.upper()} SQL
 2. Use proper table and column names from the schema
-3. If schema name is provided, prefix table names appropriately (e.g., {schema_name}.table_name)
+3. ALWAYS use schema-qualified table names: {schema_name}.table_name (e.g., {schema_name}.student_stress_levels)
 4. Include appropriate WHERE clauses, JOINs, and ORDER BY as needed
 5. Limit results to reasonable numbers (use LIMIT when appropriate)
 6. Handle case-insensitive searches appropriately for {database_type}
@@ -375,8 +375,18 @@ Respond with just the formatted text response (no JSON):
         """
         schema_lines = []
 
+        # Include schema name information if available
+        schema_name = database_schema.schema_name or "public"
+        database_type = database_schema.database_type or "postgresql"
+
+        schema_lines.append(f"Database Type: {database_type}")
+        schema_lines.append(f"Schema Name: {schema_name}")
+        schema_lines.append("")
+
         for table_name, table_info in database_schema.tables.items():
-            schema_lines.append(f"Table: {table_name}")
+            # Include schema-qualified table name
+            qualified_table_name = f"{schema_name}.{table_name}"
+            schema_lines.append(f"Table: {qualified_table_name}")
 
             if 'columns' in table_info:
                 for column in table_info['columns']:

@@ -17,6 +17,7 @@ class SupabaseConfig(BaseModel):
     url: str = Field(..., description="Supabase project URL")
     service_role_key: str = Field(..., description="Supabase service role key")
     schema: str = Field(default="public", description="Database schema name")
+    database_type: str = Field(default="postgresql", description="Database type (postgresql for Supabase)")
 
 
 class GeminiConfig(BaseModel):
@@ -53,6 +54,7 @@ class Config(BaseModel):
                 url=os.getenv("SUPABASE_URL", ""),
                 service_role_key=os.getenv("SUPABASE_SERVICE_ROLE_KEY", ""),
                 schema=os.getenv("SUPABASE_SCHEMA", "public"),
+                database_type=os.getenv("SUPABASE_DATABASE_TYPE", "postgresql"),
             ),
             gemini=GeminiConfig(
                 api_key=os.getenv("GEMINI_API_KEY", ""),

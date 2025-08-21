@@ -65,9 +65,16 @@ async def generate_sql_query(user_query: str, schema_data: Dict[str, Any]) -> Di
         Dictionary containing generated SQL, explanation, and confidence score
     """
     try:
-        # Convert schema data to DatabaseSchema object
-        database_schema = DatabaseSchema(tables=schema_data.get("tables", {}))
-        
+        # Import config to get schema name
+        from ...config.environment import config
+
+        # Convert schema data to DatabaseSchema object with schema name and database type
+        database_schema = DatabaseSchema(
+            tables=schema_data.get("tables", {}),
+            schema_name=config.supabase.schema,
+            database_type=config.supabase.database_type
+        )
+
         sql_result = await ai_service.generate_sql(user_query, database_schema)
         
         return {

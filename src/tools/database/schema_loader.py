@@ -66,7 +66,13 @@ async def load_database_schema() -> Dict[str, Any]:
         if schema_result.data:
             current_table = None
             for row in schema_result.data:
-                table_name = row.get('table_name')
+                # Handle the case where data is wrapped in a 'result' key (from RPC function)
+                if 'result' in row and isinstance(row['result'], dict):
+                    row_data = row['result']
+                else:
+                    row_data = row
+
+                table_name = row_data.get('table_name')
                 if table_name != current_table:
                     current_table = table_name
                     tables[table_name] = {
@@ -74,10 +80,10 @@ async def load_database_schema() -> Dict[str, Any]:
                         'columns': [],
                         'description': f'Table containing {table_name} data'
                     }
-                
+
                 tables[table_name]['columns'].append({
-                    'column_name': row.get('column_name'),
-                    'data_type': row.get('data_type')
+                    'column_name': row_data.get('column_name'),
+                    'data_type': row_data.get('data_type')
                 })
         
         return {
