@@ -207,6 +207,7 @@ Rules:
 6. Handle case-insensitive searches appropriately for {database_type}
 7. Return only SELECT statements (no INSERT, UPDATE, DELETE)
 8. Use {database_type}-specific syntax and functions when beneficial
+9. DO NOT include semicolons (;) at the end of the SQL query
 
 Respond in JSON format:
 {{

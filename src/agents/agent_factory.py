@@ -42,6 +42,8 @@ from ..tools import (
     generate_sql_query,
     validate_sql_query,
     database_executor_tool,
+    table_discovery_tool,
+    table_names_tool,
     format_final_response
 )
 
@@ -136,6 +138,8 @@ Example invalid questions:
             generate_sql_tool,
             validate_sql_tool,
             database_executor_tool,
+            table_discovery_tool,
+            table_names_tool,
             format_response_tool
         ]
     )

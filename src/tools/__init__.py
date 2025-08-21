@@ -29,6 +29,7 @@ from .validation.query_validator import validate_database_query
 from .validation.sql_validator import validate_sql_query
 from .database.schema_loader import load_database_schema
 from .database.database_executor import database_executor_tool
+from .database.table_discovery import table_discovery_tool, table_names_tool
 from .ai.sql_generator import generate_sql_query
 from .ai.response_formatter import format_final_response
 
@@ -39,5 +40,7 @@ __all__ = [
     'generate_sql_query',
     'validate_sql_query',
     'database_executor_tool',
+    'table_discovery_tool',
+    'table_names_tool',
     'format_final_response'
 ]

@@ -156,7 +156,7 @@ class SupabaseDatabaseService(DatabaseServiceInterface):
             if not self.client:
                 return False
             
-            # Test with a simple query via RPC
+            # Test with a simple query via RPC (no semicolon needed)
             result = self.client.rpc('execute_college_query', {
                 'query_text': 'SELECT 1 as test_connection'
             }).execute()
@@ -220,7 +220,7 @@ class SupabaseDatabaseService(DatabaseServiceInterface):
                     error="No database connection available"
                 )
 
-            # Query to get schema information
+            # Query to get schema information (no semicolon for RPC function)
             schema_query = f"""
                 SELECT
                     table_name,
@@ -231,7 +231,7 @@ class SupabaseDatabaseService(DatabaseServiceInterface):
                 FROM information_schema.columns
                 WHERE table_schema = '{self.schema_name}'
                 ORDER BY table_name, ordinal_position
-            """
+            """.strip()
 
             start_time = time.time()
             result = self.client.rpc('execute_college_query', {
@@ -284,7 +284,7 @@ class SupabaseDatabaseService(DatabaseServiceInterface):
                     error="No database connection available"
                 )
 
-            # Query to get detailed table information
+            # Query to get detailed table information (no semicolon for RPC function)
             table_query = f"""
                 SELECT
                     column_name,
@@ -298,7 +298,7 @@ class SupabaseDatabaseService(DatabaseServiceInterface):
                 WHERE table_schema = '{self.schema_name}'
                 AND table_name = '{table_name}'
                 ORDER BY ordinal_position
-            """
+            """.strip()
 
             start_time = time.time()
             result = self.client.rpc('execute_college_query', {
@@ -350,9 +350,12 @@ class SupabaseDatabaseService(DatabaseServiceInterface):
                     error="No database connection available"
                 )
 
+            # Clean the SQL query - remove trailing semicolons as the RPC function doesn't expect them
+            cleaned_query = sql_query.strip().rstrip(';')
+
             start_time = time.time()
             result = self.client.rpc('execute_college_query', {
-                'query_text': sql_query
+                'query_text': cleaned_query
             }).execute()
             execution_time = time.time() - start_time
 
