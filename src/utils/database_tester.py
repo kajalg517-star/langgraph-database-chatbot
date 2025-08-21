@@ -24,7 +24,6 @@ Uses the database service to perform lightweight connectivity tests without
 affecting your data. Provides clear success/failure feedback for troubleshooting.
 """
 
-from ..services import database_service
 from .logger import logger
 
 
@@ -54,6 +53,9 @@ async def test_database_connection() -> bool:
         Boolean indicating whether the database connection is working
     """
     try:
+        # Import here to avoid circular import
+        from ..services import database_service
+
         connection_ok = await database_service.test_connection()
         
         if connection_ok:
@@ -98,6 +100,9 @@ async def get_database_status() -> dict:
     }
     
     try:
+        # Import here to avoid circular import
+        from ..services import database_service
+
         # Test basic connection
         connection_ok = await database_service.test_connection()
         status["connection_ok"] = connection_ok
