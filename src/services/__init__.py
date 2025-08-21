@@ -29,18 +29,18 @@ USAGE EXAMPLES:
 # Use the default AI service (recommended)
 from src.services import ai_service
 
-# Create specific AI service
-from src.services import AIServiceFactory, AIProvider
-ai_service = AIServiceFactory.create_ai_service(AIProvider.GEMINI)
+# Use the default database service (recommended)
+from src.services import database_service
 
-# Backward compatibility
-from src.services import gemini_service  # Same as ai_service
+# Create specific services
+from src.services import AIServiceFactory, AIProvider, DatabaseServiceFactory, DatabaseProvider
+ai_service = AIServiceFactory.create_ai_service(AIProvider.GEMINI)
+db_service = DatabaseServiceFactory.create_database_service(DatabaseProvider.SUPABASE)
 ```
 
-MIGRATION FROM OLD ARCHITECTURE:
-The old `gemini_service` is still available for backward compatibility,
-but now it's created through the new factory system. All existing code
-continues to work without changes.
+NEW MODULAR ARCHITECTURE:
+This architecture provides complete separation of concerns between AI and database
+operations, making the system more maintainable, testable, and extensible.
 """
 
 # Import AI service components
@@ -55,8 +55,7 @@ from .ai_service_factory import (
     AIServiceFactory,
     AIProvider,
     create_default_ai_service,
-    ai_service,
-    gemini_service  # Backward compatibility
+    ai_service
 )
 
 # Import database service components
@@ -106,6 +105,5 @@ __all__ = [
 
     # Service instances
     'ai_service',
-    'database_service',
-    'gemini_service'  # Backward compatibility
+    'database_service'
 ]

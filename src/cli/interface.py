@@ -51,7 +51,8 @@ from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
-from ..agents.chatbot_agent import chatbot_agent, test_database_connection
+from ..agents.chatbot_agent import chatbot_agent
+from ..utils.database_tester import test_database_connection
 from ..config.environment import config
 from ..utils.logger import logger, log_agent_interaction
 

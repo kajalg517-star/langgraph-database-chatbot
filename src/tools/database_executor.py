@@ -114,30 +114,3 @@ async def execute_database_query(sql_query: str) -> Dict[str, Any]:
 
 # Create the ADK function tool
 database_executor_tool = FunctionTool(execute_database_query)
-
-# For backward compatibility, also create the old interface
-class DatabaseTool:
-    """
-    🔄 DATABASE TOOL - Backward compatibility wrapper
-
-    WHAT THIS IS:
-    This class provides backward compatibility with the old database tool
-    interface while using the new database service architecture internally.
-    """
-
-    async def execute_database_query(self, sql_query: str) -> Dict[str, Any]:
-        """Execute database query - backward compatibility method"""
-        return await execute_database_query(sql_query)
-
-    async def test_connection(self) -> bool:
-        """Test database connection - backward compatibility method"""
-        try:
-            connection_ok = await database_service.test_connection()
-            return connection_ok
-        except Exception as e:
-            logger.error("Database connection test failed", error=str(e))
-            return False
-
-
-# Create backward compatibility instance
-database_tool = DatabaseTool()

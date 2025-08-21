@@ -17,9 +17,9 @@ This file has been refactored for better maintainability:
 - Each component has a single, focused responsibility
 
 HOW TO USE:
-Import the chatbot agent and database tester from this module:
+Import the chatbot agent from this module:
 ```python
-from src.agents.chatbot_agent import chatbot_agent, test_database_connection
+from src.agents.chatbot_agent import chatbot_agent
 ```
 
 EXAMPLE CONVERSATION FLOW:
@@ -39,7 +39,6 @@ from pydantic import BaseModel
 
 # Import the main components
 from .agent_factory import create_chatbot_agent
-from ..utils.database_tester import test_database_connection
 
 
 class ChatbotState(BaseModel):
@@ -75,9 +74,8 @@ class ChatbotState(BaseModel):
 chatbot_agent = create_chatbot_agent()
 
 
-# Export the main components for backward compatibility
+# Export the main components
 __all__ = [
     'chatbot_agent',
-    'test_database_connection',
     'ChatbotState'
 ]

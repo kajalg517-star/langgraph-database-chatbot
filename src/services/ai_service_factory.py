@@ -203,9 +203,5 @@ def create_default_ai_service() -> AIServiceInterface:
     return AIServiceFactory.create_ai_service()
 
 
-# Create the singleton AI service instance for backward compatibility
+# Create the singleton AI service instance
 ai_service = create_default_ai_service()
-
-# For backward compatibility, also export as gemini_service
-# This allows existing code to continue working without changes
-gemini_service = ai_service
