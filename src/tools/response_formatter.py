@@ -30,7 +30,7 @@ providing meaningful summaries and insights from raw database output.
 """
 
 from typing import Dict, Any, List
-from ..services.gemini_service import gemini_service
+from ..services import ai_service
 from ..utils.logger import logger
 
 
@@ -74,7 +74,7 @@ async def format_final_response(
         Dictionary containing formatted response and processing status
     """
     try:
-        formatting_result = await gemini_service.format_response(
+        formatting_result = await ai_service.format_response(
             user_query, sql_query, query_results
         )
         

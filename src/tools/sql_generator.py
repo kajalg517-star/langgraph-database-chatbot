@@ -26,7 +26,7 @@ confidence scoring and detailed explanations for transparency.
 """
 
 from typing import Dict, Any
-from ..services.gemini_service import gemini_service, DatabaseSchema
+from ..services import ai_service, DatabaseSchema
 from ..utils.logger import logger
 
 
@@ -67,7 +67,7 @@ async def generate_sql_query(user_query: str, schema_data: Dict[str, Any]) -> Di
         # Convert schema data to DatabaseSchema object
         database_schema = DatabaseSchema(tables=schema_data.get("tables", {}))
         
-        sql_result = await gemini_service.generate_sql(user_query, database_schema)
+        sql_result = await ai_service.generate_sql(user_query, database_schema)
         
         return {
             "sql": sql_result.sql,

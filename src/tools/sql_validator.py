@@ -31,7 +31,7 @@ to help with debugging and transparency.
 """
 
 from typing import Dict, Any
-from ..services.gemini_service import gemini_service
+from ..services import ai_service
 from ..utils.logger import logger
 
 
@@ -69,7 +69,7 @@ async def validate_sql_query(sql_query: str) -> Dict[str, Any]:
         Dictionary containing validation results and reasoning
     """
     try:
-        validation_result = await gemini_service.validate_sql_query(sql_query)
+        validation_result = await ai_service.validate_sql_query(sql_query)
         
         return {
             "is_valid": validation_result.is_valid,

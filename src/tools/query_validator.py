@@ -22,7 +22,7 @@ with explanations for transparency.
 """
 
 from typing import Dict, Any
-from ..services.gemini_service import gemini_service
+from ..services import ai_service
 from ..utils.logger import logger
 
 
@@ -52,7 +52,7 @@ async def validate_database_query(user_query: str) -> Dict[str, Any]:
         Dictionary containing validation results and reasoning
     """
     try:
-        validation_result = await gemini_service.validate_database_query(user_query)
+        validation_result = await ai_service.validate_database_query(user_query)
         
         return {
             "is_valid": validation_result.is_valid,
