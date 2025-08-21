@@ -93,16 +93,7 @@ class ResponseFormattingResult(BaseModel):
     error: str = ""
 
 
-class DatabaseSchema(BaseModel):
-    """
-    🗄️ DATABASE SCHEMA - Structure information about the database
-    
-    WHAT THIS CONTAINS:
-    - tables: Dictionary of table information including columns and types
-    
-    This is database-agnostic and works with any database system.
-    """
-    tables: Dict[str, Dict[str, Any]]
+# DatabaseSchema moved to database_service_interface.py for better separation of concerns
 
 
 class AIServiceInterface(ABC):
@@ -150,9 +141,9 @@ class AIServiceInterface(ABC):
 
     @abstractmethod
     async def generate_sql(
-        self, 
-        natural_language_query: str, 
-        database_schema: DatabaseSchema
+        self,
+        natural_language_query: str,
+        database_schema: 'DatabaseSchema'  # Forward reference to avoid circular import
     ) -> SQLGenerationResult:
         """
         🧠 GENERATE SQL - Convert English question to database query

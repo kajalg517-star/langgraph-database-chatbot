@@ -26,7 +26,8 @@ confidence scoring and detailed explanations for transparency.
 """
 
 from typing import Dict, Any
-from ..services import ai_service, DatabaseSchema
+from ..services import ai_service
+from ..services.database_service_interface import DatabaseSchema
 from ..utils.logger import logger
 
 

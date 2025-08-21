@@ -29,7 +29,7 @@ from .query_validator import validate_database_query
 from .schema_loader import load_database_schema
 from .sql_generator import generate_sql_query
 from .sql_validator import validate_sql_query
-from .database_tool import database_tool, database_service
+from .database_executor import database_executor_tool, database_tool
 from .response_formatter import format_final_response
 
 # Export all tools for external use
@@ -38,7 +38,7 @@ __all__ = [
     'load_database_schema',
     'generate_sql_query',
     'validate_sql_query',
-    'database_tool',
-    'database_service',
+    'database_executor_tool',
+    'database_tool',  # Backward compatibility
     'format_final_response'
 ]

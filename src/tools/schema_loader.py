@@ -22,7 +22,7 @@ structured format that the SQL generation tool can use effectively.
 """
 
 from typing import Dict, Any
-from ..tools.database_tool import database_service
+from ..services import database_service
 from ..utils.logger import logger
 
 

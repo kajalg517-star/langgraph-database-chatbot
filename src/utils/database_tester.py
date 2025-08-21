@@ -24,7 +24,7 @@ Uses the database service to perform lightweight connectivity tests without
 affecting your data. Provides clear success/failure feedback for troubleshooting.
 """
 
-from ..tools.database_tool import database_service
+from ..services import database_service
 from ..utils.logger import logger
 
 

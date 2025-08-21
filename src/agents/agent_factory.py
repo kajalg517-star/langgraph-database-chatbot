@@ -41,7 +41,7 @@ from ..tools import (
     load_database_schema,
     generate_sql_query,
     validate_sql_query,
-    database_tool,
+    database_executor_tool,
     format_final_response
 )
 
@@ -83,7 +83,7 @@ def create_chatbot_agent() -> Agent:
     load_schema_tool = FunctionTool(load_database_schema)
     generate_sql_tool = FunctionTool(generate_sql_query)
     validate_sql_tool = FunctionTool(validate_sql_query)
-    # database_tool is already created in database_tool.py
+    # database_executor_tool is already created in database_executor.py
     format_response_tool = FunctionTool(format_final_response)
     
     # Define the agent's personality and instructions
@@ -135,7 +135,7 @@ Example invalid questions:
             load_schema_tool,
             generate_sql_tool,
             validate_sql_tool,
-            database_tool,
+            database_executor_tool,
             format_response_tool
         ]
     )

@@ -43,13 +43,12 @@ but now it's created through the new factory system. All existing code
 continues to work without changes.
 """
 
-# Import the new architecture components
+# Import AI service components
 from .ai_service_interface import (
     AIServiceInterface,
     SQLGenerationResult,
     QueryValidationResult,
-    ResponseFormattingResult,
-    DatabaseSchema
+    ResponseFormattingResult
 )
 from .gemini_ai_service import GeminiAIService
 from .ai_service_factory import (
@@ -60,24 +59,53 @@ from .ai_service_factory import (
     gemini_service  # Backward compatibility
 )
 
+# Import database service components
+from .database_service_interface import (
+    DatabaseServiceInterface,
+    DatabaseQueryResult,
+    DatabaseSchema,
+    DatabaseConnectionInfo
+)
+from .supabase_database_service import SupabaseDatabaseService
+from .database_service_factory import (
+    DatabaseServiceFactory,
+    DatabaseProvider,
+    create_default_database_service,
+    database_service
+)
+
 # Export all components for external use
 __all__ = [
-    # Core interfaces and models
+    # AI service interfaces and models
     'AIServiceInterface',
     'SQLGenerationResult',
     'QueryValidationResult',
     'ResponseFormattingResult',
-    'DatabaseSchema',
 
-    # Concrete implementations
+    # AI service implementations
     'GeminiAIService',
 
-    # Factory and utilities
+    # AI service factory and utilities
     'AIServiceFactory',
     'AIProvider',
     'create_default_ai_service',
 
+    # Database service interfaces and models
+    'DatabaseServiceInterface',
+    'DatabaseQueryResult',
+    'DatabaseSchema',
+    'DatabaseConnectionInfo',
+
+    # Database service implementations
+    'SupabaseDatabaseService',
+
+    # Database service factory and utilities
+    'DatabaseServiceFactory',
+    'DatabaseProvider',
+    'create_default_database_service',
+
     # Service instances
     'ai_service',
+    'database_service',
     'gemini_service'  # Backward compatibility
 ]

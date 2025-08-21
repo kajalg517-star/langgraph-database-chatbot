@@ -4,14 +4,14 @@
 WHAT THIS FILE DOES:
 This file implements the AI service interface specifically for Google's Gemini AI.
 It handles all the Gemini-specific details while providing the standard interface
-that the chatbot expects.
+that the chatbot expects. This service is now completely database-agnostic.
 
 KEY FEATURES:
 - 🔌 Implements the standard AIServiceInterface
 - 🧠 Uses Google Gemini 2.0 Flash for AI processing
 - 🛡️ Includes safety checks and error handling
 - 📊 Provides detailed logging and monitoring
-- 🔄 Maintains compatibility with existing functionality
+- 🔄 Database-agnostic design (works with any database)
 
 GEMINI-SPECIFIC FEATURES:
 - Advanced natural language understanding
@@ -20,12 +20,18 @@ GEMINI-SPECIFIC FEATURES:
 - Excellent response formatting
 - Fast processing with async support
 
-WHY SEPARATE FROM INTERFACE:
-This separation allows us to:
-- Easily switch to different AI providers
-- Test with mock AI services
-- Add new AI providers without changing existing code
-- Keep Gemini-specific logic isolated
+SEPARATION OF CONCERNS:
+This AI service is now purely focused on language model operations:
+- Query validation (is it database-related?)
+- SQL generation (convert English to SQL)
+- SQL validation (is the SQL safe?)
+- Response formatting (convert results to friendly text)
+
+DATABASE INDEPENDENCE:
+- No database-specific code or assumptions
+- Works with any database system (PostgreSQL, MySQL, SQLite, etc.)
+- Receives database schema as input parameter
+- Does not handle database connections or query execution
 
 TECHNICAL DETAILS:
 Uses Google's generativeai library to interact with Gemini models.
@@ -41,9 +47,9 @@ from .ai_service_interface import (
     AIServiceInterface,
     SQLGenerationResult,
     QueryValidationResult,
-    ResponseFormattingResult,
-    DatabaseSchema
+    ResponseFormattingResult
 )
+from .database_service_interface import DatabaseSchema
 from ..config.environment import config
 from ..utils.logger import logger
 
@@ -174,14 +180,18 @@ Respond in JSON format:
         - Maps natural language to database concepts
         - Generates optimized SQL with proper syntax
         - Provides confidence scoring and explanations
+        - Database-agnostic (works with any database system)
         """
         try:
             schema_context = self._build_schema_context(database_schema)
-            
-            # Note: Database-specific logic (schema prefix) should be handled
-            # by the database service layer, but keeping for backward compatibility
+
+            # Determine database type and SQL dialect
+            database_type = database_schema.database_type or "postgresql"
+            schema_name = database_schema.schema_name or "public"
+
+            # Create database-agnostic prompt
             prompt = f"""
-You are a SQL expert. Convert the following natural language query into a PostgreSQL query.
+You are a SQL expert. Convert the following natural language query into a {database_type.upper()} query.
 
 Database Schema:
 {schema_context}
@@ -189,13 +199,14 @@ Database Schema:
 Natural Language Query: "{natural_language_query}"
 
 Rules:
-1. Generate ONLY valid PostgreSQL SQL
+1. Generate ONLY valid {database_type.upper()} SQL
 2. Use proper table and column names from the schema
-3. ALWAYS prefix table names with the schema name '{config.supabase.schema}.' (e.g., {config.supabase.schema}.student_stress_survey)
+3. If schema name is provided, prefix table names appropriately (e.g., {schema_name}.table_name)
 4. Include appropriate WHERE clauses, JOINs, and ORDER BY as needed
 5. Limit results to reasonable numbers (use LIMIT when appropriate)
-6. Handle case-insensitive searches with ILIKE when searching text
+6. Handle case-insensitive searches appropriately for {database_type}
 7. Return only SELECT statements (no INSERT, UPDATE, DELETE)
+8. Use {database_type}-specific syntax and functions when beneficial
 
 Respond in JSON format:
 {{
