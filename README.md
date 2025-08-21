@@ -1,24 +1,24 @@
-# 🤖 LangGraph Database Chatbot
+# 🤖 Database Chatbot with Google ADK
 
-A production-ready interactive database chatbot built with **LangGraph**, **Supabase**, and **Gemini AI**. This chatbot allows users to query their database using natural language and get intelligent responses with actual data.
+A production-ready interactive database chatbot built with **Google's Agent Development Kit (ADK)**, **Supabase**, and **Gemini AI**. This implementation leverages ADK's agent-first architecture for enhanced performance and seamless Google ecosystem integration.
 
 ## ✨ Features
 
-- **🔄 Interactive Chat Mode**: Continuous conversation with thread persistence
-- **🗄️ Real Database Access**: Connects to actual Supabase database with RPC functions
-- **🧠 Smart Query Validation**: Only processes database-related questions
+- **🔄 Interactive Chat Mode**: Continuous conversation with session persistence
+- **🗄️ Real Database Access**: Connects to actual Supabase database with direct SQL execution
+- **🧠 Smart Query Validation**: Only processes database-related questions using ADK agents
 - **🔒 Security First**: SQL injection protection and query validation
 - **📊 Actual Data Results**: No mock data - real database queries and results
-- **🧵 Thread Persistence**: Maintains conversation context across queries
-- **⚡ LangGraph Workflow**: Proper state management and conditional routing
-- **🎯 Context7 Patterns**: Clean, maintainable code following best practices
+- **🧵 Session Persistence**: Maintains conversation context across queries using ADK sessions
+- **⚡ Google ADK Architecture**: Modern agent-based workflow with proper state management
+- **🎯 Google Integration**: Native integration with Gemini and Google Cloud services
 
 ## 🏗️ Architecture
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   CLI Interface │───▶│  LangGraph       │───▶│   Supabase      │
-│   (Interactive) │    │  Workflow        │    │   Database      │
+│   CLI Interface │───▶│  Google ADK      │───▶│   Supabase      │
+│   (Interactive) │    │  Agent           │    │   Database      │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
                               │
                               ▼
@@ -30,16 +30,17 @@ A production-ready interactive database chatbot built with **LangGraph**, **Supa
 
 ### Core Components
 
-- **LangGraph Workflow**: Manages query processing with nodes and conditional edges
-- **Supabase RPC Utility**: Direct database access using Context7 patterns
-- **Gemini AI Service**: Natural language to SQL generation and validation
-- **Interactive CLI**: Simple, reliable input handling following official patterns
+- **Google ADK Agent**: Manages query processing with tools and state management
+- **Database Tool**: Direct Supabase/PostgreSQL access using custom ADK tool
+- **Gemini AI Integration**: Natural language to SQL generation and validation
+- **Interactive CLI**: Python-based CLI with ADK Runner integration
+- **Session Service**: ADK session management for conversation persistence
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Python 3.9+ and pip
 - Supabase account and project
 - Google AI Studio API key (Gemini)
 
@@ -51,12 +52,18 @@ A production-ready interactive database chatbot built with **LangGraph**, **Supa
    cd chatbot
    ```
 
-2. **Install dependencies**
+2. **Create virtual environment**
    ```bash
-   npm install
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **Environment Setup**
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Environment Setup**
    
    Create `.env` file:
    ```env
@@ -69,9 +76,9 @@ A production-ready interactive database chatbot built with **LangGraph**, **Supa
    GEMINI_API_KEY=your_gemini_api_key
    ```
 
-4. **Database Setup**
+5. **Database Setup**
    
-   Create the RPC function in your Supabase SQL editor:
+   Use the same RPC function from the original implementation:
    ```sql
    CREATE OR REPLACE FUNCTION public.execute_college_query(query_text TEXT) 
    RETURNS TABLE(result JSONB) AS $$ 
@@ -81,81 +88,58 @@ A production-ready interactive database chatbot built with **LangGraph**, **Supa
    $$ LANGUAGE plpgsql SECURITY DEFINER;
    ```
 
-5. **Build and Run**
+6. **Run the Chatbot**
    ```bash
-   npm run build
-   npm run chat
+   python main.py chat
    ```
 
 ## 💬 Usage
 
 ### Interactive Chat Mode
 ```bash
-npm run chat
-```
-
-Start an interactive conversation:
-```
-🤖 Interactive Database Chatbot with LangGraph
-Ask me questions about your database in natural language!
-⚠️  I can only answer database-related questions.
-Type "exit" or "quit" to end the session.
-
-🧵 Session ID: chat_1755713996766_wgvl925d3
-
-💬 Your database question: Show me students with high anxiety levels
+python main.py chat
 ```
 
 ### Single Query Mode
 ```bash
-npm run query "Count all students in the database"
+python main.py query "Count all students in the database"
 ```
 
-### Example Queries
-
-✅ **Valid Database Questions:**
-- "How many students have anxiety levels above 15?"
-- "Show me the top 10 students with highest stress levels"
-- "What's the average depression score?"
-- "Count students by anxiety level"
-
-❌ **Invalid Questions (Will be rejected):**
-- "Hello" or "Hi"
-- "What's the weather?"
-- "Tell me a joke"
+### Test Database Connection
+```bash
+python main.py test
+```
 
 ## 🛠️ Development
 
 ### Project Structure
 ```
-src/
-├── cli/interface.ts              # Interactive CLI with official LangGraph patterns
-├── config/environment.ts         # Environment configuration
-├── services/gemini.ts            # Gemini AI service for NL to SQL
-├── utils/
-│   ├── logger.ts                 # Structured logging
-│   └── supabase-rpc.ts          # Supabase RPC utility (Context7)
-├── workflow/chatbot-workflow.ts  # LangGraph workflow implementation
-└── index.ts                     # Application entry point
-```
-
-### Available Scripts
-
-```bash
-npm run build      # Build TypeScript to JavaScript
-npm run clean      # Clean dist directory
-npm run chat       # Start interactive chat mode
-npm run query      # Run single query (requires argument)
-npm run test       # Test database connection
+chatbot/
+├── src/
+│   ├── agents/
+│   │   └── chatbot_agent.py      # Main ADK agent implementation
+│   ├── tools/
+│   │   └── database_tool.py      # Custom Supabase database tool
+│   ├── services/
+│   │   └── gemini_service.py     # Gemini AI integration
+│   ├── cli/
+│   │   └── interface.py          # CLI interface with ADK Runner
+│   ├── config/
+│   │   └── environment.py        # Environment configuration
+│   └── utils/
+│       └── logger.py             # Logging utilities
+├── tests/
+├── requirements.txt
+├── main.py                       # Application entry point
+└── README.md
 ```
 
 ### Key Technologies
 
-- **[LangGraph](https://github.com/langchain-ai/langgraph)**: Workflow orchestration with state management
-- **[Supabase](https://supabase.com)**: PostgreSQL database with RPC functions
+- **[Google ADK](https://github.com/google/adk-python)**: Agent Development Kit for Python
+- **[Supabase](https://supabase.com)**: PostgreSQL database with direct SQL access
 - **[Gemini AI](https://ai.google.dev)**: Natural language processing and SQL generation
-- **TypeScript**: Type-safe development
-- **Context7 Patterns**: Clean, maintainable code architecture
+- **Python 3.9+**: Modern Python with type hints and async support
 
 ## 🔧 Configuration
 
@@ -168,34 +152,23 @@ npm run test       # Test database connection
 | `SUPABASE_SCHEMA` | Database schema name (e.g., 'college') | ✅ |
 | `GEMINI_API_KEY` | Google AI Studio API key | ✅ |
 
-### Database Schema
+## 🎯 Migration from TypeScript
 
-The chatbot expects your database to have tables with student data. Example schema:
-- `student_stress_levels`: Student mental health data
-- `student_stress_survey`: Survey responses
+This Python implementation maintains full feature parity with the original TypeScript version while leveraging Google ADK's advantages:
 
-## 🎯 Features in Detail
+### Key Improvements
+- **Agent-First Architecture**: Built specifically for AI agent workflows
+- **Better Google Integration**: Native Gemini and Google Cloud integration
+- **Simplified State Management**: ADK handles session and state persistence
+- **Enhanced Tool System**: Rich ecosystem of pre-built and custom tools
+- **Production Ready**: Designed for scalable deployment
 
-### LangGraph Workflow
-- **Query Validation**: Filters non-database questions
-- **Schema Loading**: Automatic database schema discovery
-- **SQL Generation**: Natural language to SQL conversion
-- **Security Validation**: SQL injection protection
-- **Query Execution**: Safe database query execution
-- **Response Formatting**: Natural language response generation
-
-### Thread Persistence
-Each chat session maintains context:
-```typescript
-const threadId = `chat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-// All queries in the session use the same threadId for context
-```
-
-### Security Features
-- SQL injection prevention
-- Query validation and sanitization
-- Service role key protection
-- Schema-restricted access
+### Maintained Features
+- All original CLI commands and functionality
+- Same database integration and RPC functions
+- Identical query validation and security measures
+- Thread persistence and session management
+- Interactive and single-query modes
 
 ## 🤝 Contributing
 
@@ -211,11 +184,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **LangGraph Team** for the excellent workflow framework
+- **Google ADK Team** for the excellent agent development framework
 - **Supabase** for the powerful database platform
 - **Google AI** for Gemini API
-- **Context7** for clean code patterns
+- **Original TypeScript Implementation** for the solid foundation
 
 ---
 
-**Built with ❤️ using LangGraph, Supabase, and Gemini AI**
+**Built with ❤️ using Google ADK, Supabase, and Gemini AI**

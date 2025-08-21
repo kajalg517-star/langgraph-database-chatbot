@@ -1,3 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
 # Logs
 logs
 *.log
@@ -7,8 +48,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node.js (legacy)
 node_modules
-dist
 dist-ssr
 *.local
 
@@ -22,3 +63,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables (keep .env for development)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
