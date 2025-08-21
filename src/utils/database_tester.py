@@ -25,7 +25,7 @@ affecting your data. Provides clear success/failure feedback for troubleshooting
 """
 
 from ..services import database_service
-from ..utils.logger import logger
+from .logger import logger
 
 
 async def test_database_connection() -> bool:

@@ -22,8 +22,8 @@ with explanations for transparency.
 """
 
 from typing import Dict, Any
-from ..services import ai_service
-from ..utils.logger import logger
+from ...services import ai_service
+from ...utils.logger import logger
 
 
 async def validate_database_query(user_query: str) -> Dict[str, Any]:

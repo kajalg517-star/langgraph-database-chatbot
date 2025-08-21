@@ -22,8 +22,8 @@ structured format that the SQL generation tool can use effectively.
 """
 
 from typing import Dict, Any
-from ..services import database_service
-from ..utils.logger import logger
+from ...services import database_service
+from ...utils.logger import logger
 
 
 async def load_database_schema() -> Dict[str, Any]:

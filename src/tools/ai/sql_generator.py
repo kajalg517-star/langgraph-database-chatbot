@@ -26,9 +26,9 @@ confidence scoring and detailed explanations for transparency.
 """
 
 from typing import Dict, Any
-from ..services import ai_service
-from ..services.database_service_interface import DatabaseSchema
-from ..utils.logger import logger
+from ...services import ai_service
+from ...core.models.database_models import DatabaseSchema
+from ...utils.logger import logger
 
 
 async def generate_sql_query(user_query: str, schema_data: Dict[str, Any]) -> Dict[str, Any]:

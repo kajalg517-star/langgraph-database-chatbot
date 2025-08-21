@@ -33,10 +33,10 @@ when you don't know exactly which type you need until runtime.
 from typing import Optional
 from enum import Enum
 
-from .ai_service_interface import AIServiceInterface
-from .gemini_ai_service import GeminiAIService
-from ..config.environment import config
-from ..utils.logger import logger
+from ...core.interfaces.ai_service_interface import AIServiceInterface
+from ..ai.gemini_ai_service import GeminiAIService
+from ...config.environment import config
+from ...utils.logger import logger
 
 
 class AIProvider(Enum):

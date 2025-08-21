@@ -33,10 +33,10 @@ when you don't know exactly which type you need until runtime.
 from typing import Optional
 from enum import Enum
 
-from .database_service_interface import DatabaseServiceInterface
-from .supabase_database_service import SupabaseDatabaseService
-from ..config.environment import config
-from ..utils.logger import logger
+from ...core.interfaces.database_service_interface import DatabaseServiceInterface
+from ..database.supabase_database_service import SupabaseDatabaseService
+from ...config.environment import config
+from ...utils.logger import logger
 
 
 class DatabaseProvider(Enum):

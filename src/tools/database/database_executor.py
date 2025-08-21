@@ -39,9 +39,9 @@ the tool works with any database provider (Supabase, PostgreSQL, MySQL, etc.).
 from typing import Dict, Any, List
 from google.adk.tools import FunctionTool
 
-from ..services.database_service_interface import DatabaseServiceInterface
-from ..services import database_service
-from ..utils.logger import logger
+from ...core.interfaces.database_service_interface import DatabaseServiceInterface
+from ...services import database_service
+from ...utils.logger import logger
 
 
 async def execute_database_query(sql_query: str) -> Dict[str, Any]:

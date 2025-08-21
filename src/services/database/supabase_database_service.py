@@ -35,14 +35,14 @@ import time
 from typing import Dict, Any, List, Optional
 from supabase import create_client, Client
 
-from .database_service_interface import (
-    DatabaseServiceInterface,
+from ...core.interfaces.database_service_interface import DatabaseServiceInterface
+from ...core.models.database_models import (
     DatabaseQueryResult,
     DatabaseSchema,
     DatabaseConnectionInfo
 )
-from ..config.environment import config
-from ..utils.logger import logger
+from ...config.environment import config
+from ...utils.logger import logger
 
 
 class SupabaseDatabaseService(DatabaseServiceInterface):

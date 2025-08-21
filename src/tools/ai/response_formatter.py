@@ -30,8 +30,8 @@ providing meaningful summaries and insights from raw database output.
 """
 
 from typing import Dict, Any, List
-from ..services import ai_service
-from ..utils.logger import logger
+from ...services import ai_service
+from ...utils.logger import logger
 
 
 async def format_final_response(

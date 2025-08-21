@@ -44,14 +44,14 @@ operations, making the system more maintainable, testable, and extensible.
 """
 
 # Import AI service components
-from .ai_service_interface import (
-    AIServiceInterface,
+from ..core.interfaces.ai_service_interface import AIServiceInterface
+from ..core.models.ai_models import (
     SQLGenerationResult,
     QueryValidationResult,
     ResponseFormattingResult
 )
-from .gemini_ai_service import GeminiAIService
-from .ai_service_factory import (
+from .ai.gemini_ai_service import GeminiAIService
+from .factories.ai_service_factory import (
     AIServiceFactory,
     AIProvider,
     create_default_ai_service,
@@ -59,14 +59,14 @@ from .ai_service_factory import (
 )
 
 # Import database service components
-from .database_service_interface import (
-    DatabaseServiceInterface,
+from ..core.interfaces.database_service_interface import DatabaseServiceInterface
+from ..core.models.database_models import (
     DatabaseQueryResult,
     DatabaseSchema,
     DatabaseConnectionInfo
 )
-from .supabase_database_service import SupabaseDatabaseService
-from .database_service_factory import (
+from .database.supabase_database_service import SupabaseDatabaseService
+from .factories.database_service_factory import (
     DatabaseServiceFactory,
     DatabaseProvider,
     create_default_database_service,

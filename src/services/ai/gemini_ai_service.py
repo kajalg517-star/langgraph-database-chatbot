@@ -43,15 +43,15 @@ import re
 from typing import Dict, Any, List
 import google.generativeai as genai
 
-from .ai_service_interface import (
-    AIServiceInterface,
+from ...core.interfaces.ai_service_interface import AIServiceInterface
+from ...core.models.ai_models import (
     SQLGenerationResult,
     QueryValidationResult,
     ResponseFormattingResult
 )
-from .database_service_interface import DatabaseSchema
-from ..config.environment import config
-from ..utils.logger import logger
+from ...core.models.database_models import DatabaseSchema
+from ...config.environment import config
+from ...utils.logger import logger
 
 
 class GeminiAIService(AIServiceInterface):

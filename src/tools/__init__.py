@@ -25,12 +25,12 @@ All tools are available through this module for easy importing throughout the co
 """
 
 # Import all tool functions for easy access
-from .query_validator import validate_database_query
-from .schema_loader import load_database_schema
-from .sql_generator import generate_sql_query
-from .sql_validator import validate_sql_query
-from .database_executor import database_executor_tool
-from .response_formatter import format_final_response
+from .validation.query_validator import validate_database_query
+from .validation.sql_validator import validate_sql_query
+from .database.schema_loader import load_database_schema
+from .database.database_executor import database_executor_tool
+from .ai.sql_generator import generate_sql_query
+from .ai.response_formatter import format_final_response
 
 # Export all tools for external use
 __all__ = [

@@ -31,8 +31,8 @@ to help with debugging and transparency.
 """
 
 from typing import Dict, Any
-from ..services import ai_service
-from ..utils.logger import logger
+from ...services import ai_service
+from ...utils.logger import logger
 
 
 async def validate_sql_query(sql_query: str) -> Dict[str, Any]:
